@@ -8,6 +8,7 @@ ex. user: `matsu_chara` ==> emoji: `:m_atsu_chara:`
 
 1. get token via https://api.slack.com/docs/oauth-test-tokens
 1. get slack session. ref: https://github.com/smashwilson/slack-emojinator
+1. get api_token via https://$your_team.slack.com/customize/emoji and type boot_data.api_token on js console.  
 1. `git submodule update --init`
 1. `cd slack-emojinator && pyenv virtualenv slack-emojinator && pip install -r requirements.txt && cd ..`
 1. `cp .env.example .env`
