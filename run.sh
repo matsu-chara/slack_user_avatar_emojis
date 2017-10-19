@@ -43,4 +43,3 @@ users=$(fetch_users)
 filtered_users=$(filter_users "$users")
 fetch_avatar_image "$filtered_users"
 python ./slack-emojinator/upload.py "${EMOJI_DIR}"/*
-
