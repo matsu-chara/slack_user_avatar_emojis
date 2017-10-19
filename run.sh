@@ -19,10 +19,11 @@ function fetch_users() {
 
 function filter_users() {
   users="$1"
+  target_user="$2"
 
   # filter not target user
-  if [[ "$EMOJI_TARGET" != "*" ]]; then
-    users="$(echo "$users" | grep "$EMOJI_TARGET")"
+  if [[ "$target_user" != "*" ]]; then
+    users="$(join <(echo "$users" | sort -u) <(echo "$target_user" | tr ',' '\n' | sort -u))"
   fi
 
   # filter ignore users
@@ -51,14 +52,22 @@ function remove_avatar_image() {
   do
     file_name=$(_get_file_name "$name")
     echo "removing $file_name"
-    curl -X POST -w "\n" -F "name=$file_name" -F "token=$SLACK_API_TOKEN_FOR_DELETE" "https://folio-sec.slack.com/api/emoji.remove"
+    curl -X POST -w "\n" -F "name=$file_name" -F "token=$SLACK_API_TOKEN_FOR_DELETE" "https://${SLACK_TEAM}.slack.com/api/emoji.remove"
     sleep 0.5
   done
 
 }
 
+# argument
+# $1 EMOJI_TARGET. will overwride $EMOJI_TARGET via `.env`
+if [ "$#" -gt 0 ]; then
+  target_user="$1"
+else
+  target_user="$EMOJI_TARGET"
+fi
+
 users=$(fetch_users)
-filtered_users=$(filter_users "$users")
+filtered_users=$(filter_users "$users" "$target_user")
 fetch_avatar_image "$filtered_users"
 remove_avatar_image "$filtered_users"
 python ./slack-emojinator/upload.py "${EMOJI_DIR}"/*
