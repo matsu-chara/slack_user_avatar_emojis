@@ -10,7 +10,9 @@ function _get_file_name() {
 
   first=$(echo "$name" | cut -c1)
   last=$(echo "$name" | cut -c2-)
-  echo "${first}_${last}"
+
+  ## replace invalid chars
+  echo "${first}_${last}" | tr "." "_" | tr " " "_"
 }
 
 function fetch_users() {
@@ -67,6 +69,7 @@ else
 fi
 
 users=$(fetch_users)
+echo "$users"
 filtered_users=$(filter_users "$users" "$target_user")
 fetch_avatar_image "$filtered_users"
 remove_avatar_image "$filtered_users"
