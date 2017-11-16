@@ -46,16 +46,16 @@ function fetch_avatar_image() {
   done
 }
 
-function remove_avatar_image() {
+function replace_avatar() {
   users="$1"
   echo "$users" | while read -r name avatar
   do
     file_name=$(_get_file_name "$name")
     echo "removing $file_name"
     curl -X POST -w "\n" -F "name=$file_name" -F "token=$SLACK_API_TOKEN_FOR_DELETE" "https://${SLACK_TEAM}.slack.com/api/emoji.remove"
+    python ./slack-emojinator/upload.py "$EMOJI_DIR/$file_name.jpg"
     sleep 0.5
   done
-
 }
 
 # argument
@@ -69,5 +69,4 @@ fi
 users=$(fetch_users)
 filtered_users=$(filter_users "$users" "$target_user")
 fetch_avatar_image "$filtered_users"
-remove_avatar_image "$filtered_users"
-python ./slack-emojinator/upload.py "${EMOJI_DIR}"/*
+replace_avatar "$filtered_users"
