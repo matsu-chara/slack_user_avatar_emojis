@@ -69,7 +69,6 @@ else
 fi
 
 users=$(fetch_users)
-echo "$users"
 filtered_users=$(filter_users "$users" "$target_user")
 fetch_avatar_image "$filtered_users"
 replace_avatar "$filtered_users"
