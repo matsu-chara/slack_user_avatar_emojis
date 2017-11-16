@@ -16,4 +16,5 @@ ex. user: `matsu_chara` ==> emoji: `:m_atsu_chara:`
 
 1. get user lists via https://api.slack.com/methods/users.list
 1. wget it
+1. remove current emojis
 1. register by slack-emojinator

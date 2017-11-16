@@ -10,11 +10,13 @@ function _get_file_name() {
 
   first=$(echo "$name" | cut -c1)
   last=$(echo "$name" | cut -c2-)
-  echo "${first}_${last}"
+
+  ## replace invalid chars
+  echo "${first}_${last}" | tr "." "_" | tr " " "_"
 }
 
 function fetch_users() {
-  curl --silent --show-error "https://slack.com/api/users.list?token=$SLACK_API_TOKEN" | jq -r '.members | map(select(.is_bot == false and .deleted == false and .is_restricted == '"$INCLUDE_RESTRICTED"')) | map(.name + "\t" + .profile.image_72)[]'
+  curl --silent --show-error "https://slack.com/api/users.list?token=$SLACK_API_TOKEN" | jq -r '.members | map(select(.is_bot == false and .deleted == false and (.is_restricted == false or .is_restricted == '"$INCLUDE_RESTRICTED"'))) | map(.name + "\t" + .profile.image_72)[]'
 }
 
 function filter_users() {
@@ -67,6 +69,7 @@ else
 fi
 
 users=$(fetch_users)
+echo "$users"
 filtered_users=$(filter_users "$users" "$target_user")
 fetch_avatar_image "$filtered_users"
 replace_avatar "$filtered_users"
