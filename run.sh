@@ -8,11 +8,18 @@ source .env
 function _get_file_name() {
   name="$1"
 
-  first=$(echo "$name" | cut -c1)
-  last=$(echo "$name" | cut -c2-)
+  if [ "$EMOJI_NAME_TYPE" = "split" ]; then
+    first=$(echo "$name" | cut -c1)
+    last=$(echo "$name" | cut -c2-)
 
-  ## replace invalid chars
-  echo "${first}_${last}" | tr "." "_" | tr " " "_"
+    ## replace invalid chars
+    echo "${first}_${last}" | tr "." "_" | tr " " "_"
+  elif [ "$EMOJI_NAME_TYPE" = "raw" ]; then
+    echo "$name"
+  else
+    echo "error: unsupported $EMOJI_NAME_TYPE."
+    exit 1
+  fi
 }
 
 function fetch_users() {
