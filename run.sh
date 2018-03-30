@@ -13,7 +13,7 @@ function _get_file_name() {
     last=$(echo "$name" | cut -c2-)
 
     ## replace invalid chars
-    echo "${first}_${last}" | tr "." "_" | tr " " "_"
+    echo "${first}_${last}" | tr -d [:blank:] | tr "." "_" | tr " " "_" | tr [:upper:] [:lower:]
   elif [ "$EMOJI_NAME_TYPE" = "raw" ]; then
     echo "$name"
   else
@@ -23,7 +23,7 @@ function _get_file_name() {
 }
 
 function fetch_users() {
-  curl --silent --show-error "https://slack.com/api/users.list?token=$SLACK_API_TOKEN" | jq -r '.members | map(select(.is_bot == false and .deleted == false and (.is_restricted == false or .is_restricted == '"$INCLUDE_RESTRICTED"') and .profile.display_name != "" )) | map(.profile.display_name + "\t" + .profile.image_72)[]'
+  curl --silent --show-error "https://slack.com/api/users.list?token=$SLACK_API_TOKEN" | jq -r '.members | map(select(.is_bot == false and .deleted == false and (.is_restricted == false or .is_restricted == '"$INCLUDE_RESTRICTED"') and .profile.display_name != "" and ((.profile.display_name|test("[^\\x01-\\x7E]"))|not) )) | map((.profile.display_name|gsub(" "; "")) + "\t" + .profile.image_72)[]'
 }
 
 function filter_users() {
