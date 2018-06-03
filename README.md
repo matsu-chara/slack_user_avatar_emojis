@@ -1,5 +1,7 @@
 ## slack_user_avatar_emojis
 
+[![Build Status](https://travis-ci.org/matsu-chara/slack_user_avatar_emojis.svg?branch=master)](https://travis-ci.org/matsu-chara/slack_user_avatar_emojis)
+
 automate user avatars to emoji
 
 ex. user: `matsu_chara` ==> emoji: `:m_atsu_chara:`
