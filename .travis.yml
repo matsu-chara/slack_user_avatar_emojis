@@ -9,7 +9,8 @@ before_install:
   - docker pull koalaman/shellcheck
 
 script:
-  - docker run -v $(pwd):/scripts koalaman/shellcheck /scripts/run.sh
+  - echo "#!/bin/bash" > .env
+  - docker run --rm -v $(pwd):/scripts -w /scripts koalaman/shellcheck -x .env run.sh
 
 matrix:
   fast_finish: true

@@ -13,7 +13,7 @@ function _get_file_name() {
     last=$(echo "$name" | cut -c2-)
 
     ## replace invalid chars
-    echo "${first}_${last}" | tr -d [:blank:] | tr "." "_" | tr " " "_" | tr [:upper:] [:lower:]
+    echo "${first}_${last}" | tr -d "[:blank:]" | tr "." "_" | tr " " "_" | tr "[:upper:]" "[:lower:]"
   elif [ "$EMOJI_NAME_TYPE" = "raw" ]; then
     echo "$name"
   else
@@ -61,7 +61,7 @@ function replace_avatar() {
   do
     file_name=$(_get_file_name "$name")
     echo "removing $file_name"
-    curl -X POST -w "\n" -F "name=$file_name" -F "token=$SLACK_API_TOKEN_FOR_DELETE" "https://${SLACK_TEAM}.slack.com/api/emoji.remove"
+    curl -X POST -w '\n' -F "name=$file_name" -F "token=$SLACK_API_TOKEN_FOR_DELETE" "https://${SLACK_TEAM}.slack.com/api/emoji.remove"
     python ./slack-emojinator/upload.py "$EMOJI_DIR/$file_name.jpg"
     sleep 0.5
   done
