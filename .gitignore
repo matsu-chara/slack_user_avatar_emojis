@@ -1,3 +1,4 @@
 # Ignore environment variable file
 .env
 avatars
+ignored.sh

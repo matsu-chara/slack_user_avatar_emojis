@@ -39,6 +39,17 @@ function filter_users() {
   join -v 1 <(echo "$users" | sort -u) <(echo "$IGNORE_USERS" | tr ',' '\n' | sort -u)
 }
 
+function exit_if_not_found() {
+  users="$1"
+  filtered_users="$2"
+  target_user="$3"
+
+  if [[ -z $filtered_users ]]; then
+    echo "$target_user was not found."
+    exit 1
+  fi
+}
+
 function fetch_avatar_image() {
   users="$1"
 
@@ -77,5 +88,6 @@ fi
 
 users=$(fetch_users)
 filtered_users=$(filter_users "$users" "$target_user")
+exit_if_not_found "$users" "$filtered_users" "$target_user"
 fetch_avatar_image "$filtered_users"
 replace_avatar "$filtered_users"
