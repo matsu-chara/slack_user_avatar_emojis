@@ -9,7 +9,7 @@ ex. user: `matsu_chara` ==> emoji: `:m_atsu_chara:`
 ## usage
 
 1. `git submodule update --init`
-1. `cd slack-emojinator && pyenv virtualenv slack-emojinator && pip install -r requirements.txt && cd ..`
+1. `cd slack-emojinator && pyenv virtualenv slack-emojinator 3.6.3 && pyenv local slack-emojinator && pip install -r requirements.txt && cd ..`
 1. `cp .env.example .env`
 1. `$EDITOR .env`
 1. `./run.sh` (it execute `source .env`, so enviroment variable might be overwrriten.)
